@@ -2,9 +2,10 @@ const http = require('http');
 const fs = require('fs');
 const qs = require('qs');
 
-const server = http.createServer(function(req, res){
+
+const server = http.createServer((req,res) => {
     if (req.method === 'GET') {
-        fs.readFile('./Views/register.html', function(err,data){
+        fs.readFile('./views/display.html', (err, data) => {
             res.writeHead(200, {'Content-Type': 'text/html'});
             res.write(data);
             return res.end();
@@ -13,16 +14,14 @@ const server = http.createServer(function(req, res){
         let data = ``;
         req.on(`data`, chunk => {
             data += chunk;
-        })
+       })
         req.on(`end`, () => {
             const userInfo = qs.parse(data);
-            fs.readFile(`./Views/info.html`,'utf8', function(err,datahtml){
+            fs.readFile(`./Views/todo.html`,'utf8',(err, datahtml) =>{
                 if (err) {
                     console.log(err);
                 }
-                datahtml = datahtml.replace('{name}', userInfo.name);
-                datahtml = datahtml.replace('{email}', userInfo.email);
-                datahtml = datahtml.replace('{password}', userInfo.password);
+                datahtml = datahtml.replace('{todo}', userInfo.todo);
                 res.writeHead(200, {'Content-Type': 'text/html'});
                 res.write(datahtml);
                 return res.end();
@@ -34,6 +33,6 @@ const server = http.createServer(function(req, res){
     }
 });
 
-server.listen(8002, () => {
-    console.log(`server running at localhost:8002`)
+server.listen(8003, () => {
+    console.log(`server running at localhost:8003`)
 });
